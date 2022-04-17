@@ -39,12 +39,12 @@ def create_header_value(client_id, nonce, body_hash, ext, mac):
     header_value += f"MAC id=\"{client_id}\",nonce=\"{nonce}"
 
     if body_hash:
-        header_value += f"\",bodyhash=\"{body_hash}"
+        header_value += f"\",bodyhash=\"{body_hash.decode('utf-8')}"
 
     if ext:
         header_value += f"\",ext=\"{ext}"
 
-    header_value += f"\",mac=\"{mac}\""
+    header_value += f"\",mac=\"{mac.decode('utf-8')}\""
     return header_value
 
 # Generate a one time use nonce (hard-coded here, but should be something like seconds between issue date and system date, colon, a random alphanumeric string)
@@ -58,7 +58,7 @@ normalized_request = normalize_request(nonce, request_method, uri, host, port, b
 print(f"normalized_request: {repr(normalized_request)}")
 # HMAC SHA256 hash the normalized request using the client secret and base64 encode the result
 hashed_normalized_request = hash_normalized_request(normalized_request, secret)
-print(f"hashed_normalized_request: {hashed_normalized_request}")
+print(f"hashed_normalized_request: {hashed_normalized_request.decode('utf-8')}")
 # Generate the value that should actually be used in the "Authorization" HTTP header
 header_value = create_header_value(client_id, nonce, body_hash, ext, hashed_normalized_request)
 print(f"header_value: {header_value}")
