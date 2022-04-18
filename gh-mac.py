@@ -13,7 +13,6 @@ client_id = "sv:v1:c78ada21-62fa-11e5-ba00-43d58aece945"
 secret = "qwfXhRvs6r5xJEEK37KO+qvSGvAijtJ/vG8xim6e+xo="
 issue_date = 1443126493378
 
-nonce = "7349622:vCZfJEjW"
 body = json.dumps({"task_id":"ae463g"})
 request_method = "GET"
 host = "pos-api-url.grubhub.com"
@@ -68,10 +67,10 @@ def _create_header_value(client_id: str, nonce: str, body_hash: str, ext: str, m
 def create_authentication_header(body: str, method: str, uri: str) -> str:
   auth_nonce = _generate_nonce()
   body_hash = _hash_body(body).decode('utf-8')
-  normal_request = _normalize_request(nonce, method, 
+  normal_request = _normalize_request(auth_nonce, method, 
                                        uri, host, port, body_hash, ext)
   hashed_normal_request = _hash_normalized_request(normal_request, secret).decode('utf-8')
-  header_value = _create_header_value(client_id, nonce, body_hash, ext, hashed_normal_request)
+  header_value = _create_header_value(client_id, auth_nonce, body_hash, ext, hashed_normal_request)
   return header_value
 
 # Generate the value that should actually be used in the "Authorization" HTTP header
