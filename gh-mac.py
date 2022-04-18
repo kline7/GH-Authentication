@@ -58,24 +58,18 @@ def create_header_value(client_id, nonce, body_hash, ext, mac):
     header_value += f"\",mac=\"{mac.decode('utf-8')}\""
     return header_value
 
-# RUNNER CODE
-
-# Generate a one time use nonce
-generated_nonce = generate_nonce()
-print(f"nonce: {generated_nonce}")
-
-# SHA256 hash the body and base64 encode the result
-body_hash = hash_body(body)
-print(f"body_hash: {body_hash.decode('utf-8')}")
-
-# Normalize the pieces of the request to ensure the hash, in the next step, matches what the service expects
-normalized_request = normalize_request(nonce, request_method, uri, host, port, body_hash.decode('utf-8'), ext)
-print(f"normalized_request: {repr(normalized_request)}")
-
-# HMAC SHA256 hash the normalized request using the client secret and base64 encode the result
-hashed_normalized_request = hash_normalized_request(normalized_request, secret)
-print(f"hashed_normalized_request: {hashed_normalized_request.decode('utf-8')}")
+def create_authentication_header(body, method, uri):
+  auth_nonce = generate_nonce()
+  print(f"nonce: {auth_nonce}")
+  body_hash = hash_body(body)
+  print(f"body_hash: {body_hash.decode('utf-8')}")
+  normal_request = normalize_request(nonce, method, uri, host, port, body_hash.decode('utf-8'), ext)
+  print(f"normalized_request: {repr(normal_request)}")
+  hashed_normal_request = hash_normalized_request(normal_request, secret)
+  print(f"hashed_normalized_request: {hashed_normal_request.decode('utf-8')}")
+  header_value = create_header_value(client_id, nonce, body_hash, ext, hashed_normal_request)
+  return header_value
 
 # Generate the value that should actually be used in the "Authorization" HTTP header
-header_value = create_header_value(client_id, nonce, body_hash, ext, hashed_normalized_request)
+header_value = create_authentication_header(body, request_method, uri)
 print(f"header_value: {header_value}")
