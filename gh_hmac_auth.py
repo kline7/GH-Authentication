@@ -21,7 +21,7 @@ class GhHmacAuth(AuthBase):
         self.issue_date = issue_date
         self.partner_key = partner_key
 
-    def __call__(self, request, request_method, request_uri, body: Optional[str] = "", ext: Optional[str] = None):
+    def __call__(self, request, request_method, request_uri, body: Optional[str] = "", ext: Optional[str] = ""):
         self._encode(request=request, method=request_method, uri=request_uri, body=body, ext=ext)
         return request
 
