@@ -1,3 +1,4 @@
+
 import hashlib
 import hmac
 import base64
@@ -10,8 +11,8 @@ from typing import Optional
 
 class GhHmacAuth(AuthBase):
     SIGNATURE_DELIM = "\n"
-    HOST = "<Enter Host>"  # Ideally an env var
-    PORT = 8080  # HTTPS generally runs on port 443 
+    HOST = "api-third-party-gtm-pp.grubhub.com"  # Ideally an env var
+    PORT = 443  # HTTPS generally runs on port 443 
     HTTP_HEADER = "AUTHORIZATION"
     PARTNER_KEY_HEADER = "X-GH-PARTNER-KEY"
 
